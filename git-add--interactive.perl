@@ -106,6 +106,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply --cached',
 		FILTER => 'file-only',
 		IS_REVERSE => 0,
+		REFRESH => 1,
 	},
 	'stash' => {
 		DIFF => 'diff-index -p HEAD',
@@ -113,6 +114,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply --cached',
 		FILTER => undef,
 		IS_REVERSE => 0,
+		REFRESH => 1,
 	},
 	'reset_head' => {
 		DIFF => 'diff-index -p --cached',
@@ -120,6 +122,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply -R --cached',
 		FILTER => 'index-only',
 		IS_REVERSE => 1,
+		REFRESH => 0,
 	},
 	'reset_nothead' => {
 		DIFF => 'diff-index -R -p --cached',
@@ -127,6 +130,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply --cached',
 		FILTER => 'index-only',
 		IS_REVERSE => 0,
+		REFRESH => 0,
 	},
 	'checkout_index' => {
 		DIFF => 'diff-files -p',
@@ -134,6 +138,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply -R',
 		FILTER => 'file-only',
 		IS_REVERSE => 1,
+		REFRESH => 1,
 	},
 	'checkout_head' => {
 		DIFF => 'diff-index -p',
@@ -141,6 +146,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply -R',
 		FILTER => undef,
 		IS_REVERSE => 1,
+		REFRESH => 1,
 	},
 	'checkout_nothead' => {
 		DIFF => 'diff-index -R -p',
@@ -148,6 +154,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply',
 		FILTER => undef,
 		IS_REVERSE => 0,
+		REFRESH => 1,
 	},
 	'worktree_head' => {
 		DIFF => 'diff-index -p',
@@ -155,6 +162,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply -R',
 		FILTER => undef,
 		IS_REVERSE => 1,
+		REFRESH => 1,
 	},
 	'worktree_nothead' => {
 		DIFF => 'diff-index -R -p',
@@ -162,6 +170,7 @@ my %patch_modes = (
 		APPLY_CHECK => 'apply',
 		FILTER => undef,
 		IS_REVERSE => 0,
+		REFRESH => 1,
 	},
 );
 
@@ -1861,7 +1870,9 @@ sub main_loop {
 }
 
 process_args();
-refresh();
+if ($patch_mode_flavour{REFRESH}) {
+	refresh();
+}
 if ($patch_mode_only) {
 	patch_update_cmd();
 }
